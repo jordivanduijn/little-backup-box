@@ -12,29 +12,23 @@ Run the following command on the Raspberry Pi:
 
     curl -sSL https://goo.gl/btmpKd | bash
 
-When prompted, reboot the Raspberry Pi.
+When prompted, select the desired backup mode:
 
-By default, Little Backup Box is configured to back up storage cards. To make the script transfer files directly from the connected camera, run the `crontab -e` command on Raspberry Pi. Comment the following line by prepending *#* to it:
+1. **Storage Card Backup** Back up files from a storage card connected via a card reader to an external storage device)
+2. **Camera Backup** Back up files from the connected camera to the */home/pi/[CAMERA MODEL]* directory on Raspberry Pi. **Important** If you choose to use this mode make sure that the camera is set to the MTP USB connection mode.
 
-    @reboot sudo /home/pi/little-backup-box/backup.sh > /home/pi/little-backup-box.log
+Reboot the Raspberry Pi.
 
-Uncomment then the line below by removing *#*:
+## Alternative Camera Backup
 
-    #@reboot sudo /home/pi/little-backup-box/gphoto-backup.sh > /home/pi/gphoto-backup.log
+Some cameras (notably Sony Alpha models) may not work with the default direct file transfer script. In this case, run the `crontab -e` command and comment the following lines by adding *#* to the beginning of each line:
 
-Save the changes.
+    #@reboot sudo /home/pi/little-backup-box/backup.sh > /home/pi/backup.log
+	#@reboot sudo /home/pi/little-backup-box/gphoto-backup.sh > /home/pi/gphoto-backup.log
 
-Keep in mind that in this case, the transferred files are saved in the */home/pi/[CAMERA MODEL]* directory on the system storage card. Make sure that the card you use with Raspberry Pi has adequate storage capacity.
-
-**Important** Make sure that the camera is set to the MTP USB connection mode.
-
-### Alternative Direct File Transfer Script
-
-Some cameras (notably Sony Alpha models) may not work with the default direct file transfer script. In this case, try the *gphoto-backup-alt.sh* script instead by enabling the following cron job as described above:
+Uncomment then the following line by removing *#*:
 
     #@reboot sudo /home/pi/little-backup-box/gphoto-backup-alt.sh > /home/pi/gphoto-backup-alt.log
-
-This script saves transferred files in the */home/pi/BACKUP* directory.
 
 ## Usage
 
@@ -46,12 +40,12 @@ To geocorrelate the backed up photos, place a GPX file in the root of the storag
 
 **Note:** To differentiate between different storage cards, the backup script creates a datetime-based *.id* file in the root of each storage card. The name of the *.id* file is also used as the destination backup folder on the storage device.
 
-With the direct camera transfer script enabled, follow this steps:
+With the camera backup mode enabled, follow this steps:
 
 1. Boot the Raspberry Pi
 2. Connect the camera and turn it on and wait till the Raspberry Pi shuts down
 
-Note that the direct camera file transfer script doesn't support geocorrelation.
+Note that the camera backup mode doesn't support geocorrelation.
 
 ## Problems?
 
